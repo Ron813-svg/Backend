@@ -3,8 +3,6 @@
 //Creo un array de funciones
 
 
-
-
 const productsController = {};
 
 //Igual, mandamos a llamar el esquema desde models, el products.js, no se te olvide el .js
