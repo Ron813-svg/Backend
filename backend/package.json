@@ -12,7 +12,10 @@
   "description": "",
   "dependencies": {
     "cors": "^2.8.5",
+<<<<<<< HEAD
     "dotenv": "^16.4.7",
+=======
+>>>>>>> 12b3f33c28314c4eac131a9154665a653950e7a7
     "express": "^4.21.2",
     "mongoose": "^8.11.0"
   },
