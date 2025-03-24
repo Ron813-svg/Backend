@@ -8,6 +8,7 @@ import employeeRoutes from "./src/routes/employees.js";
 import branchesRoutes from "./src/routes/branches.js";
 import reviewsController from "./src/routes/reviews.js";
 import assessmentRoutes from "./src/routes/assessment.js";
+import registerRoutes from "./src/routes/register.js";
 
 
 
@@ -21,6 +22,7 @@ app.use("/api/employees", employeeRoutes);
 app.use("/api/branches", branchesRoutes);
 app.use("/api/reviews", reviewsController);
 app.use("/api/assessments", assessmentRoutes);
+app.use("/api/register",)
 
 
 //Exporto esta constante para usar express en todos lados.
