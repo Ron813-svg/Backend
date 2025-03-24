@@ -9,21 +9,21 @@ import branchesRoutes from "./src/routes/branches.js";
 import reviewsController from "./src/routes/reviews.js";
 import assessmentRoutes from "./src/routes/assessment.js";
 import registerRoutes from "./src/routes/register.js";
+import cookieParser from "cookie-parser";
 
 
 
 //Creo una constante que es igual a la libreria que acabo de importar, y la ejecuto
 const app = express();
 app.use(express.json());
-
+app.use(cookieParser());
 app.use("/api/products", productsRoutes);
 app.use("/api/clients", clientsRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/branches", branchesRoutes);
 app.use("/api/reviews", reviewsController);
 app.use("/api/assessments", assessmentRoutes);
-app.use("/api/register",)
-
+app.use("/api/register",registerRoutes); 
 
 //Exporto esta constante para usar express en todos lados.
 export default app;

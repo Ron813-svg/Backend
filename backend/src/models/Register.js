@@ -53,4 +53,4 @@ const registerSchema = new Schema({
 }
 );
 
-export default model("registers", registerSchema);
+export default model("employees", registerSchema);
