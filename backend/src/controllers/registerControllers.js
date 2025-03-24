@@ -15,7 +15,7 @@ registerController.Register = async (req, res) => {
 
         const passwordHash = await bcryptjs.hash(password,10)
 
-        const newEmployee = await registerModel({name, lastName, birthday, email, hireDate, password, telephone, dui, isssNumber, isVerified })
+        const newEmployee = await registerModel({name, lastName, birthday, email, hireDate, password: passwordHash, telephone, dui, isssNumber, isVerified })
 
         await newEmployee.save()
 
