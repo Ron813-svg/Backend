@@ -11,6 +11,7 @@ import assessmentRoutes from "./src/routes/assessment.js";
 import registerRoutes from "./src/routes/register.js";
 import cookieParser from "cookie-parser";
 import loginRoutes from "./src/routes/login.js";
+import logoutRoutes from "./src/routes/logout.js";
 
 
 
@@ -26,6 +27,7 @@ app.use("/api/reviews", reviewsController);
 app.use("/api/assessments", assessmentRoutes);
 app.use("/api/register",registerRoutes); 
 app.use("/api/login", loginRoutes);
+app.use("/api/logout", logoutRoutes);
 
 //Exporto esta constante para usar express en todos lados.
 export default app;
