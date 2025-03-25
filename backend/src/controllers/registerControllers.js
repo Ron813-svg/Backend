@@ -29,6 +29,7 @@ registerController.Register = async (req, res) => {
             (err, token) => {
                 if(err) console.log({message: "Hubo un error en el token: " + err.message})
                 res.cookie("authtoken", token)
+            res.json({message: "El empleado se ha registrado correctamente"})
             }
 
         )

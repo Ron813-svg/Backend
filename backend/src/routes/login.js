@@ -1,7 +1,8 @@
 import express from 'express';
+import loginController from '../controllers/loginControllers.js';
 
-const router = express.router();
+const router = express.Router();
 
-router.route("/").get();
+router.route("/").post(loginController.Login);
 
 export default router;

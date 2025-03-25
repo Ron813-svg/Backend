@@ -10,6 +10,7 @@ import reviewsController from "./src/routes/reviews.js";
 import assessmentRoutes from "./src/routes/assessment.js";
 import registerRoutes from "./src/routes/register.js";
 import cookieParser from "cookie-parser";
+import loginRoutes from "./src/routes/login.js";
 
 
 
@@ -24,6 +25,7 @@ app.use("/api/branches", branchesRoutes);
 app.use("/api/reviews", reviewsController);
 app.use("/api/assessments", assessmentRoutes);
 app.use("/api/register",registerRoutes); 
+app.use("/api/login", loginRoutes);
 
 //Exporto esta constante para usar express en todos lados.
 export default app;
