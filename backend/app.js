@@ -12,7 +12,7 @@ import registerRoutes from "./src/routes/register.js";
 import cookieParser from "cookie-parser";
 import loginRoutes from "./src/routes/login.js";
 import logoutRoutes from "./src/routes/logout.js";
-import registe rClients from "./src/routes/registerClient.js";
+import registerClients from "./src/routes/registerClient.js";
 
 
 
@@ -31,7 +31,7 @@ app.use("/api/assessments", assessmentRoutes);
 app.use("/api/register",registerRoutes); 
 app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
-app.use("/api/registerClients/verifyCode", registerClients)
+app.use("/api/registerClients", registerClients)
 
 //Exporto esta constante para usar express en todos lados.
 export default app;

@@ -16,7 +16,7 @@ registerClientsController.register = async (req, res) =>{
             return res.json({message: "Client already exist"})
         }
         
-        const passwordHash = bcryptjs.hash(password, 10)
+        const passwordHash = await bcryptjs.hash(password, 10)
 
         const newClient = new clientsModel({name, lastName, birthday, email, password: passwordHash, telephone, dui: dui || null, isVerified: isVerified || false});
 
@@ -28,7 +28,6 @@ registerClientsController.register = async (req, res) =>{
 
             {email, verificationCode},
             
-            config.JWT.secret,
 
             {expiresIn: "2h"}
         )
@@ -43,21 +42,39 @@ registerClientsController.register = async (req, res) =>{
             }
         })
 
-        const mailOptions ={
+        const mailOptions = {
             from: config.email.email_user,
             to: email,
-            subject: "Verificacion de correo",
-            text: "Para verificar tu cuenta utiliza el siguiente codigo:" + verificationCode + "\n Experica en dos horas"
+            subject: "Verificación de correo",
+            html: `
+                <div style="max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); overflow: hidden; border: 2px solid #ffb3ff; font-family: Arial, sans-serif;">
+                    <div style="background-color: #ffccf9; color: #6a0572; text-align: center; padding: 20px; font-size: 24px; font-weight: bold;">
+                        🌸 Verificación de Correo 🌸
+                    </div>
+                    <div style="padding: 20px; color: #333333; line-height: 1.6;">
+                        <p>Hola,</p>
+                        <p>¡Gracias por registrarte! Para verificar tu cuenta, utiliza el siguiente código:</p>
+                        <div style="display: block; margin: 20px auto; padding: 10px 20px; background-color: #ffe6fa; color: #6a0572; font-size: 20px; font-weight: bold; text-align: center; border-radius: 8px; border: 1px dashed #ffb3ff; width: fit-content;">
+                            ${verificationCode}
+                        </div>
+                        <p>Este código expirará en 2 horas.</p>
+                        <p>Si no solicitaste este correo, por favor ignóralo.</p>
+                    </div>
+                    <div style="background-color: #ffe6fa; text-align: center; padding: 10px; font-size: 12px; color: #6a0572;">
+                        🌸 Con cariño, el equipo de [Tu Empresa] 🌸
+                    </div>
+                </div>
+            `
         };
 
-        transporter.sendMail(mailOptions, (error, info)=>{
-            if(error){
-                return res.json({message: "Error sending email"+ error})
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.json({ message: "Error sending email: " + error });
             }
-            console.log("Email send"+ info)
-        })
+            console.log("Email sent: " + info.response);
+        });
 
-        res.json({message: "Client registeres, Please verify your email with the code"})
+        res.json({message: "Client register, Please verify your email with the code"})
 
     } 
     catch (error) {
@@ -70,6 +87,7 @@ registerClientsController.verificationCodeEmail = async (req, res) => {
     const token = req.cookie.verificationCode;
 
     try {
+        console.log("JWT Secret:", config.JWT.secret);
         const decoded = jsonwebtoken.verify(token, config.JWT.secret)
         const {email, verificationCode: storedCode} = decoded;
 
@@ -91,5 +109,3 @@ registerClientsController.verificationCodeEmail = async (req, res) => {
 }
 
 export default registerClientsController;
-
-
