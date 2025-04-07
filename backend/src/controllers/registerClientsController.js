@@ -65,6 +65,31 @@ registerClientsController.register = async (req, res) =>{
     }
 };
 
+registerClientsController.verificationCodeEmail = async (req, res) => {
+    const { requirecode } = req.body;
+    const token = req.cookie.verificationCode;
+
+    try {
+        const decoded = jsonwebtoken.verify(token, config.JWT.secret)
+        const {email, verificationCode: storedCode} = decoded;
+
+        if(requirecode !== storedCode){
+            return res.json ({message: "Invalid code"})
+        }
+        const client = await clientsModel.findOne({email})
+        client.isVerified = true;
+        await client.save()
+
+        res.clearCookie("verificationToken")
+
+        res.json({message: "Email verified Successfuly"})
+
+
+    } catch (error) {
+        console.log("Error: " + error)
+    }
+}
+
 export default registerClientsController;
 
 
