@@ -17,6 +17,7 @@ reviewsController.insertReview = async (req, res) => {
 reviewsController.updateReview = async (req, res) => {
     const { comment, rating, idClient } = req.body;
     const updatedReview = await reviewsController.findByIdAndUpdate(req.params.id, { comment, rating, idClient }, {new: true})
+    
     res.json({message: 'updated'});
 }
 
