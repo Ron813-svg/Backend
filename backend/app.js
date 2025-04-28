@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 import loginRoutes from "./src/routes/login.js";
 import logoutRoutes from "./src/routes/logout.js";
 import registerClients from "./src/routes/registerClient.js";
+import passRecovRoute from "./src/routes/passwordRecover.js"
 
 
 
@@ -32,6 +33,7 @@ app.use("/api/register",registerRoutes);
 app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/registerClients", registerClients)
+app.use("/api/passwordRecovery", passRecovRoute)
 
 //Exporto esta constante para usar express en todos lados.
 export default app;
