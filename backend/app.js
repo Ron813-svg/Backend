@@ -14,6 +14,7 @@ import loginRoutes from "./src/routes/login.js";
 import logoutRoutes from "./src/routes/logout.js";
 import registerClients from "./src/routes/registerClient.js";
 import passRecovRoute from "./src/routes/passwordRecover.js"
+import blogRoutes from "./src/routes/blog.js";
 
 
 
@@ -34,6 +35,7 @@ app.use("/api/login", loginRoutes);
 app.use("/api/logout", logoutRoutes);
 app.use("/api/registerClients", registerClients)
 app.use("/api/passwordRecovery", passRecovRoute)
+app.use("/api/blog", blogRoutes)
 
 //Exporto esta constante para usar express en todos lados.
 export default app;
