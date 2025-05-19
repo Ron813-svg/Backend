@@ -15,6 +15,7 @@ import logoutRoutes from "./src/routes/logout.js";
 import registerClients from "./src/routes/registerClient.js";
 import passRecovRoute from "./src/routes/passwordRecover.js"
 import blogRoutes from "./src/routes/blog.js";
+import { validateAuthToken } from "./src/middlewares/validateAuthToken.js";
 
 
 
@@ -22,11 +23,11 @@ import blogRoutes from "./src/routes/blog.js";
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
-app.use("/api/products", productsRoutes);
+app.use("/api/products", validateAuthToken(['employee', 'admin']), productsRoutes);
 app.use("/api/clients", clientsRoutes);
 app.use("/api/employees", employeeRoutes);
 app.use("/api/branches", branchesRoutes);
-app.use("/api/reviews", reviewsController);
+app.use("/api/reviews", validateAuthToken(['employee']), reviewsController);
 app.use("/api/assessments", assessmentRoutes);
 
 
