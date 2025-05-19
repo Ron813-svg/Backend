@@ -1,38 +1,45 @@
-import  jsonwebtoken  from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 import bcryptjs from "bcryptjs";
 import nodemailer from "nodemailer";
 import crypto from "crypto";
-
-import clientsModel from "../models/Clients.js"
+import clientsModel from "../models/Clients.js";
 import { config } from "../config.js";
 
 const registerClientsController = {};
 
-registerClientsController.register = async (req, res) =>{
-    const {name, lastName, birthday, email, password, telephone, dui, isVerified} = req.body;
-    try{
-        const existingClient = await clientsModel.findOne({email})
-        if(existingClient){
-            return res.json({message: "Client already exist"})
+registerClientsController.register = async (req, res) => {
+    const { name, lastName, birthday, email, password, telephone, dui, isVerified } = req.body;
+    
+    try {
+        const existingClient = await clientsModel.findOne({ email });
+        if (existingClient) {
+            return res.status(400).json({ message: "Client already exists" });
         }
-        
-        const passwordHash = await bcryptjs.hash(password, 10)
 
-        const newClient = new clientsModel({name, lastName, birthday, email, password: passwordHash, telephone, dui: dui || null, isVerified: isVerified || false});
+        const passwordHash = await bcryptjs.hash(password, 10);
 
-        await newClient.save()
+        const newClient = new clientsModel({
+            name,
+            lastName,
+            birthday,
+            email,
+            password: passwordHash,
+            telephone,
+            dui: dui || null,
+            isVerified: isVerified || false
+        });
 
-        const verificationCode = crypto.randomBytes(3).toString("hex")
+        await newClient.save();
+
+        const verificationCode = crypto.randomBytes(3).toString("hex");
 
         const tokenCode = jsonwebtoken.sign(
+            { email, verificationCode },
+            config.JWT.secret, // Ahora pasamos la clave secreta correctamente
+            { expiresIn: "2h" }
+        );
 
-            {email, verificationCode},
-            
-
-            {expiresIn: "2h"}
-        )
-
-        res.cookie("verificationToken", tokenCode, {maxAge: 2*60*60*1000})
+        res.cookie("verificationToken", tokenCode, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true });
 
         const transporter = nodemailer.createTransport({
             service: "gmail",
@@ -40,7 +47,7 @@ registerClientsController.register = async (req, res) =>{
                 user: config.email.email_user,
                 pass: config.email.email_pass
             }
-        })
+        });
 
         const mailOptions = {
             from: config.email.email_user,
@@ -69,43 +76,52 @@ registerClientsController.register = async (req, res) =>{
 
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return res.json({ message: "Error sending email: " + error });
+                return res.status(500).json({ message: "Error sending email: " + error });
             }
             console.log("Email sent: " + info.response);
         });
 
-        res.json({message: "Client register, Please verify your email with the code"})
+        res.json({ message: "Client registered. Please verify your email with the code." });
 
-    } 
-    catch (error) {
-        console.log("Error: "+ error)
+    } catch (error) {
+        console.error("Error:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
 registerClientsController.verificationCodeEmail = async (req, res) => {
     const { requirecode } = req.body;
-    const token = req.cookie.verificationCode;
+    const token = req.cookies.verificationToken; // Corregido el acceso a cookies
 
     try {
-        console.log("JWT Secret:", config.JWT.secret);
-        const decoded = jsonwebtoken.verify(token, config.JWT.secret)
-        const {email, verificationCode: storedCode} = decoded;
-
-        if(requirecode !== storedCode){
-            return res.json ({message: "Invalid code"})
+        if (!token) {
+            return res.status(401).json({ message: "No verification token found" });
         }
-        const client = await clientsModel.findOne({email})
+
+        console.log("JWT Secret:", config.JWT.secret);
+        const decoded = jsonwebtoken.verify(token, config.JWT.secret);
+        const { email, verificationCode: storedCode } = decoded;
+
+        if (requirecode !== storedCode) {
+            return res.status(400).json({ message: "Invalid verification code" });
+        }
+
+        const client = await clientsModel.findOne({ email });
+        if (!client) {
+            return res.status(404).json({ message: "Client not found" });
+        }
+
         client.isVerified = true;
-        await client.save()
+        await client.save();
 
-        res.clearCookie("verificationToken")
+        res.clearCookie("verificationToken");
 
-        res.json({message: "Email verified Successfuly"})
-
+        res.json({ message: "Email verified successfully" });
 
     } catch (error) {
-        console.log("Error: " + error)
+        console.error("Error:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
 
 export default registerClientsController;

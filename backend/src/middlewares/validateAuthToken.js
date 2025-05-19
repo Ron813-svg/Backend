@@ -17,7 +17,7 @@ export const validateAuthToken = (allowebUserTypes = []) => {
             }
 
         } catch (error) {
-                    console.log('error: '+error)
+            console.log('error: '+error)
         }
     }
 }
