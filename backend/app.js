@@ -19,11 +19,26 @@ import faqsRoutes from "./src/routes/faqs.js";
 import { validateAuthToken } from "./src/middlewares/validateAuthToken.js";
 
 
+import swaggerUi from 'swagger-ui-express'
+import fs from 'fs'
+import path from 'path'
+
+
 
 //Creo una constante que es igual a la libreria que acabo de importar, y la ejecuto
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
+
+const swaggerDocument = JSON.parse(
+    fs.readFileSync(
+        path.resolve("./documentacion.json"),
+        "utf-8"
+    )
+)
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+
 app.use("/api/products", validateAuthToken(['employee', 'admin']), productsRoutes);
 app.use("/api/clients", clientsRoutes);
 app.use("/api/employees", employeeRoutes);
