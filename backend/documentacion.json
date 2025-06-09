@@ -243,7 +243,7 @@
         "tags": [
           "Branches"
         ],
-        "summary": "Your DELETE endpoint",
+        "summary": "Delete Branches",
         "description": "Delete Branche",
         "operationId": "delete-api-branches",
         "parameters": [
@@ -251,6 +251,100 @@
             "name": "id",
             "in": "query",
             "description": "Necesita el id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/api/clients": {
+      "get": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Get Clients",
+        "description": "Get Clients",
+        "operationId": "get-api-clients",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Put Clients",
+        "description": "Put clients",
+        "operationId": "put-api-clients",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "necesita el Id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/api_clients_body"
+              },
+              "examples": {
+                "Example 1": {
+                  "value": {
+                    "name": "string",
+                    "lastName": "string",
+                    "birthday:": "2019-08-24",
+                    " email": "string",
+                    "password": "string",
+                    "telephone": "string",
+                    "dui": "string",
+                    "isVerified": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Clients"
+        ],
+        "summary": "Delete Clients",
+        "description": "Delete Clients",
+        "operationId": "delete-api-clients",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
             "required": false,
             "schema": {
               "type": "string"
@@ -710,6 +804,61 @@
             "type": "string",
             "x-stoplight": {
               "id": "51uj4z2ojphdj"
+            }
+          }
+        }
+      },
+      "api_clients_body": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "dlwqt828ial1e"
+            }
+          },
+          "lastName": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "sp4w2m5wdn9jy"
+            }
+          },
+          "birthday:": {
+            "type": "string",
+            "format": "date",
+            "x-stoplight": {
+              "id": "51ywgk586tdrc"
+            }
+          },
+          " email": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "acnupjquz4alr"
+            }
+          },
+          "password": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "5wom2wwfiw5l8"
+            }
+          },
+          "telephone": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "lf8jfpos1n6pr"
+            }
+          },
+          "dui": {
+            "type": "string",
+            "x-stoplight": {
+              "id": "ahutenhrtw3f2"
+            }
+          },
+          "isVerified": {
+            "type": "boolean",
+            "default": true,
+            "x-stoplight": {
+              "id": "cc33ve5679twv"
             }
           }
         }
